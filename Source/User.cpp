@@ -67,15 +67,13 @@ void User::init(string _name, string _username, string _password)
 	string str;
 	while (!f_s.eof()) {
 		getline(f_s, str);
-		message.send.push_back(str);
+		if (!str.empty())    message.send.push_back(str);
 	}
 
 	while (!f_r.eof()) {
 		getline(f_r, str);
-		if(!str.empty())
-			message.receive.push_back(str);
+		if(!str.empty())    message.receive.push_back(str);
 	}
-
 	f_s.close();
 	f_r.close();
 }
@@ -114,6 +112,11 @@ string User::getName()
 void User::setName(string _name)
 {
 	name = _name;
+}
+
+void User::view_list_book(vector<Book>& lstBook)
+{
+
 }
 
 // DUMMY METHOR
@@ -171,4 +174,9 @@ void User::setVouder(double percent)
 double User::getVoucher()
 {
 	return 0.0;
+}
+
+Book User::editBook(string namebook)
+{
+	return Book();
 }

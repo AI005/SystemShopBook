@@ -1,4 +1,4 @@
-One Piece - 1,comic,Oda,19800,JAP,1
+One Piece - 1,comic,Oda,19800,JAP,0
 One Piece - 2,comic,Oda,19800,JAP,1
 One Piece - 3,comic,Oda,19800,JAP,1
 One Piece - 4,comic,Oda,19800,JAP,1
@@ -23,8 +23,3 @@ CHI PHEO,literature,NAM CAO,21700,Quoc Gia,1
 LAO HAC,literature,NAM CAO,22000,Quoc Gia,1
 THANH GIONG,literature,NAM CAO,14100,Quoc Gia,1
 DUA HAU,literature,NAM CAO,17000,Quoc Gia,1
-,literature,NAM CAO,17000,Quoc Gia,1
-,literature,NAM CAO,17000,Quoc Gia,1
-,literature,NAM CAO,17000,Quoc Gia,1
-,literature,NAM CAO,17000,Quoc Gia,1
-,literature,NAM CAO,17000,Quoc Gia,1

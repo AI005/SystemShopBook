@@ -10,11 +10,12 @@ public:
 public:
 	vector<Book>lstBook;
 public:
+	Book editBook(string namebook);
 	bool add_detail(Book& book);
 	bool remove_detail(string name);
-	void view_lstBook();
 	void editPrice(string nameBook, double newPrice);
 	bool allow_sell(string namebook, bool check);
+	void view_lstBook();
 	Provider();
 	Provider(string _name, string _username, string _password, TYPEUSER _type);
 	~Provider();

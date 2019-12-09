@@ -12,6 +12,7 @@ protected:
 	vector<Post>Bill;
 	double percent;
 public:
+	void view_list_book(vector<Book>& lstBook);
 	int findBook(string nameBook, vector<Book>lstBook);
 	void buy(vector<Book>lstBook);
 	void edit_Bill();

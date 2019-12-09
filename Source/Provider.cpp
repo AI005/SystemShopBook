@@ -2,7 +2,7 @@
 
 
 Provider::Provider(string _name, string _username, string _password, TYPEUSER _type)
-	:User(_name, _username, _password, _type){}
+	:User(_name, _username, _password, _type) {}
 
 Provider::Provider()
 {
@@ -63,6 +63,17 @@ bool Provider::allow_sell(string namebook, bool check)
 	return false;
 }
 
+Book Provider::editBook(string namebook)
+{
+	for (auto& a : lstBook) {
+		if (a.getName() == namebook) {
+			a.editBook();
+			return a;
+		}
+	}
+	throw "\nthis book is not exist";
+}
+
 void Provider::view_lstBook()
 {
 	struct INFORMATION
@@ -80,29 +91,31 @@ void Provider::view_lstBook()
 	cout << string(Width, '_') << endl;
 	cout << "|";
 	for (auto a : info) {
-		cout << setw(minSpace* a.length) << a.name + " |";
+		cout << setw(minSpace * a.length) << a.name + " |";
 	}
 	cout << endl << string(Width, '-') << endl;
 
 	ostringstream convert;
 	for (auto a : lstBook) {
+
 		cout << "|";
-		cout << setw(minSpace*info[0].length) << a.getName() + " |";
-		cout << setw(minSpace*info[1].length) << a.getType() + " |";
-		cout << setw(minSpace*info[2].length) << a.getAuthor() + " |";
+		cout << setw(minSpace * info[0].length) << a.getName() + " |";
+		cout << setw(minSpace * info[1].length) << a.getType() + " |";
+		cout << setw(minSpace * info[2].length) << a.getAuthor() + " |";
 
 		convert << a.getID() << " |";
-		cout << setw(minSpace*info[3].length) << convert.str();
+		cout << setw(minSpace * info[3].length) << convert.str();
 		convert.str("");
 
 		convert << a.getPrice() << " |";
-		cout << setw(minSpace*info[4].length) << convert.str();
+		cout << setw(minSpace * info[4].length) << convert.str();
 		convert.str("");
 
-		cout << setw(minSpace*info[5].length) << a.getNXB() + " |";
+		cout << setw(minSpace * info[5].length) << a.getNXB() + " |";
 
-		if (a.is_sell())	cout << setw(minSpace*info[6].length) << " On  |";
-		else                cout << setw(minSpace*info[6].length) << " Off |";
+		if (a.is_sell())	cout << setw(minSpace * info[6].length) << " On  |";
+		else                cout << setw(minSpace * info[6].length) << " Off |";
 		cout << endl << string(Width, '-') << endl;
+
 	}
 }

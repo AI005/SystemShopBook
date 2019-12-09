@@ -34,6 +34,7 @@ public:
 	void setID(int _ID);
 	void setPrice(double _price);
 	
+	void editBook();
 	bool is_sell();
 	void OnSellMode();
 	void OffSellMode();

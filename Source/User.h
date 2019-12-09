@@ -35,8 +35,8 @@ public:
 	string getPassword();
 	string getName();
 	User(string _name, string _username, string _password, TYPEUSER _type);
-	
 	// virtual for custom
+	virtual void view_list_book(vector<Book>& lstBook);
 	virtual int findBook(string nameBook, vector<Book>lstBook);
 	virtual void buy(vector<Book>lstBook);
 	virtual void edit_Bill();
@@ -45,6 +45,7 @@ public:
 	virtual void setVouder(double percent);
 	virtual double getVoucher();
 	// virtual for provider
+	virtual Book editBook(string namebook);
 	virtual bool add_detail(Book& book);
 	virtual bool remove_detail(string name);
 	virtual void view_lstBook();

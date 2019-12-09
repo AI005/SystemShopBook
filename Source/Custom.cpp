@@ -176,3 +176,47 @@ void Custom::setVouder(double percent)
 {
 	this->percent = percent;
 }
+
+
+void Custom::view_list_book(vector<Book>& lstBook)
+{
+	struct INFORMATION
+	{
+		string name;
+		int length;
+	};
+	vector<INFORMATION>info{ {"Name", 5}, {"Type", 3}, {"Author", 4}, {"ID", 1}, {"Price", 2}, {"NXB", 3} };
+	int n = info.size();
+	int minSpace = 5;
+	int Width = 0;
+	for (auto a : info) { Width += a.length; }
+	Width = Width * minSpace + 2;
+
+	cout << string(Width, '_') << endl;
+	cout << "|";
+	for (auto a : info) {
+		cout << setw(minSpace * a.length) << a.name + " |";
+	}
+	cout << endl << string(Width, '-') << endl;
+
+	ostringstream convert;
+	for (auto a : lstBook) {
+		if (a.getCheckSell() == true) {
+			cout << "|";
+			cout << setw(minSpace * info[0].length) << a.getName() + " |";
+			cout << setw(minSpace * info[1].length) << a.getType() + " |";
+			cout << setw(minSpace * info[2].length) << a.getAuthor() + " |";
+
+			convert << a.getID() << " |";
+			cout << setw(minSpace * info[3].length) << convert.str();
+			convert.str("");
+
+			convert << a.getPrice() << " |";
+			cout << setw(minSpace * info[4].length) << convert.str();
+			convert.str("");
+
+			cout << setw(minSpace * info[5].length) << a.getNXB() + " |";
+			cout << endl << string(Width, '-') << endl;
+		}
+	}
+}

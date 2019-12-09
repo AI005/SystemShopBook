@@ -27,26 +27,46 @@ string SystemLibrary::convert_name_to_username(string name)
 
 void SystemLibrary::init_list_NXB()
 {
-	for (auto &a : lstBook) {
-		add_list_NXB(a);
+	fstream f_lstNXB;
+	string name, username, password;
+	f_lstNXB.open("login\\listNXB.txt", ios::in);
+	int i = 0;
+	NXB item;
+	while (!f_lstNXB.eof()) {
+		getline(f_lstNXB, name, ',');
+		getline(f_lstNXB, username, ',');
+		getline(f_lstNXB, password);
+		if (name != "")
+			item.init(name, username, password);
+		lstNXB.push_back(item);
 	}
+	f_lstNXB.close();
 
-	for (auto &a : lstNXB) {
-		a.init(a.getName(), SystemLibrary::convert_name_to_username(a.getName()),
-			SystemLibrary::convert_name_to_username(a.getName()));
+	for (auto& a : lstBook) {
+		add_list_NXB(a);
 	}
 }
 
 
 void SystemLibrary::init_list_author()
 {
-	for (auto &a : lstBook) {
-		add_list_author(a);
+	fstream f_lstAuthor;
+	string name, username, password;
+	f_lstAuthor.open("login\\listAuthor.txt", ios::in);
+	int i = 0;
+	Author item;
+	while (!f_lstAuthor.eof()) {
+		getline(f_lstAuthor, name, ',');
+		getline(f_lstAuthor, username, ',');
+		getline(f_lstAuthor, password);
+		if (name != "")
+			item.init(name, username, password);
+		lstAuthor.push_back(item);
 	}
+	f_lstAuthor.close();
 
-	for (auto &a : lstAuthor) {
-		a.init(a.getName(), SystemLibrary::convert_name_to_username(a.getName()),
-			SystemLibrary::convert_name_to_username(a.getName()));
+	for (auto& a : lstBook) {
+		add_list_author(a);
 	}
 }
 
@@ -54,7 +74,7 @@ void SystemLibrary::init_list_admin()
 {
 	fstream f_lstAdmin;
 	string name, username, password;
-	f_lstAdmin.open("listAdmin.txt", ios::in);
+	f_lstAdmin.open("login\\listAdmin.txt", ios::in);
 	lstAdmin.resize(2);
 	int i = 0;
 	while (!f_lstAdmin.eof()) {
@@ -72,7 +92,7 @@ void SystemLibrary::init_list_custom()
 	string name, username, password;
 	const int MAXLENGTH = 100;
 	fstream f_lstUser;
-	f_lstUser.open("listUser.txt", ios::in);
+	f_lstUser.open("login\\listUser.txt", ios::in);
 	char c;
 	Custom item;
 	while (!f_lstUser.eof())
@@ -93,15 +113,18 @@ void SystemLibrary::init_listbook()
 
 	fstream f_lstBook("listBook.txt", ios::in);
 	int i = 1;
+	char c;
 	Book item;
 	while (!f_lstBook.eof()) {
 		getline(f_lstBook, name, ',');
+		if (name == "")
+			break;
 		getline(f_lstBook, type, ',');
 		getline(f_lstBook, author, ',');
 		getline(f_lstBook, price, ',');
 		getline(f_lstBook, NXB, ',');
 		f_lstBook >> check;
-		f_lstBook.get();
+		c = f_lstBook.get();
 		item.init(name, type, author, i++, (double)stof(price), NXB, check);
 		lstBook.push_back(item);
 	}
@@ -157,6 +180,24 @@ void SystemLibrary::add_detail(Book& a)
 	add_list_NXB(a);
 }
 
+void SystemLibrary::add_book_by_provider()
+{
+	Book newBook;
+	newBook.input();
+	newBook.setID(lstBook.size() + 1);
+	if ((currentOnline->getType() == PUBLISHING && currentOnline->getName() == newBook.getNXB())
+		|| 
+		(currentOnline->getType() == AUTHOR && currentOnline->getName() == newBook.getAuthor()))
+	{
+		add_detail(newBook);
+	}
+	else
+	{
+		if (currentOnline->getType() == PUBLISHING)    cout << "\nWrong NXB";
+		else                                           cout << "\nWrong Author";
+	}
+}
+
 void SystemLibrary::remove_detail(string nameBook)
 {
 	for (auto&a : lstAuthor) {
@@ -174,6 +215,26 @@ void SystemLibrary::remove_detail(string nameBook)
 			lstBook.erase(lstBook.begin() + i);
 			break;
 		}
+	}
+}
+
+void SystemLibrary::remove_detailBook_by_Provider()
+{
+	Book *item = NULL;
+	string namebook;
+	cin.ignore(256, '\n');    cout << "\nname's book: ";    getline(cin, namebook);
+	for (auto& a : lstBook) {
+		if (a.getName() == namebook) {
+			item = &a;
+			break;
+		}
+	}
+	if (item == NULL) {
+		cout << "\nthis book is not exist on list";
+	}
+	else
+	{
+		remove_detail(namebook);
 	}
 }
 
@@ -246,6 +307,45 @@ void SystemLibrary::remove_NXB(string NXB)
 	init_list_NXB();
 }
 
+void SystemLibrary::editBookbyAdmin()
+{
+	string namebook;
+	cin.ignore(256, '\n');    cout << "\nName book: ";    getline(cin, namebook);
+	int pos;
+	for (pos = 0; pos < lstBook.size(); pos++)
+	{
+		if (lstBook[pos].getName() == namebook) {
+			break;
+		}
+		pos++;
+	}
+	if (pos == lstBook.size())    cout << "\nthisbook is not exist";
+	else {
+		lstBook[pos].editBook();
+	}
+}
+
+void SystemLibrary::editBookbyProvider()
+{
+	string namebook;
+	cin.ignore(256, '\n');    cout << "\nName book: ";    getline(cin, namebook);
+	try {
+		Book item = currentOnline->editBook(namebook);
+		int pos;
+		for (pos = 0; pos < lstBook.size(); pos++)
+		{
+			if (lstBook[pos].getName() == namebook) {
+				break;
+			}
+			pos++;
+		}
+		lstBook[pos] = item;
+	}
+	catch(string error) {
+		cout << error;
+	}
+}
+
 
 void SystemLibrary::viewAllBook()
 {
@@ -264,7 +364,7 @@ void SystemLibrary::viewAllBook()
 	cout << string(Width, '_') << endl;
 	cout << "|";
 	for (auto a : info) {
-		cout << setw(minSpace* a.length) << a.name + " |";
+		cout << setw(minSpace * a.length) << a.name + " |";
 	}
 	cout << endl << string(Width, '-') << endl;
 
@@ -290,6 +390,49 @@ void SystemLibrary::viewAllBook()
 		cout << endl << string(Width, '-') << endl;
 	}
 }
+
+//void SystemLibrary::viewAllBookByCustom()
+//{
+//	struct INFORMATION
+//	{
+//		string name;
+//		int length;
+//	};
+//	vector<INFORMATION>info{ {"Name", 5}, {"Type", 3}, {"Author", 4}, {"ID", 1}, {"Price", 2}, {"NXB", 3}};
+//	int n = info.size();
+//	int minSpace = 5;
+//	int Width = 0;
+//	for (auto a : info) { Width += a.length; }
+//	Width = Width * minSpace + 2;
+//
+//	cout << string(Width, '_') << endl;
+//	cout << "|";
+//	for (auto a : info) {
+//		cout << setw(minSpace * a.length) << a.name + " |";
+//	}
+//	cout << endl << string(Width, '-') << endl;
+//
+//	ostringstream convert;
+//	for (auto a : lstBook) {
+//		if (a.getCheckSell() == true) {
+//			cout << "|";
+//			cout << setw(minSpace * info[0].length) << a.getName() + " |";
+//			cout << setw(minSpace * info[1].length) << a.getType() + " |";
+//			cout << setw(minSpace * info[2].length) << a.getAuthor() + " |";
+//
+//			convert << a.getID() << " |";
+//			cout << setw(minSpace * info[3].length) << convert.str();
+//			convert.str("");
+//
+//			convert << a.getPrice() << " |";
+//			cout << setw(minSpace * info[4].length) << convert.str();
+//			convert.str("");
+//
+//			cout << setw(minSpace * info[5].length) << a.getNXB() + " |";
+//			cout << endl << string(Width, '-') << endl;
+//		}
+//	}
+//}
 
 void SystemLibrary::view_detail_authorBook(string author)
 {
@@ -350,13 +493,14 @@ void SystemLibrary::ExportListBooktoFile()
 {
 	fstream f_lstBook;
 	f_lstBook.open("listBook.txt", ios::trunc | ios::out);
-	for (auto a : lstBook) {
-		f_lstBook << a.getName() << ',';
-		f_lstBook << a.getType() << ',';
-		f_lstBook << a.getAuthor() << ',';
-		f_lstBook << a.getPrice() << ',';
-		f_lstBook << a.getNXB() << ',';
-		f_lstBook << (int)a.getCheckSell() << endl;
+	for (int i = 0; i < lstBook.size(); ++i) {
+		f_lstBook << lstBook[i].getName() << ',';
+		f_lstBook << lstBook[i].getType() << ',';
+		f_lstBook << lstBook[i].getAuthor() << ',';
+		f_lstBook << lstBook[i].getPrice() << ',';
+		f_lstBook << lstBook[i].getNXB() << ',';
+		f_lstBook << (int)lstBook[i].getCheckSell();
+		if(i <= lstBook.size() - 1)    f_lstBook << endl;
 	}
 	f_lstBook.close();
 }
@@ -364,11 +508,12 @@ void SystemLibrary::ExportListBooktoFile()
 void SystemLibrary::ExportListCustomtoFile()
 {
 	fstream f_lstCustom;
-	f_lstCustom.open("listUser.txt", ios::trunc | ios::out);
-	for (auto a : lstCustom) {
-		f_lstCustom << a.getName() << ',';
-		f_lstCustom << a.getUsername() << ',';
-		f_lstCustom << a.getPassword() << endl;
+	f_lstCustom.open("login\\listUser.txt", ios::trunc | ios::out);
+	for (int i = 0; i < lstCustom.size(); ++i) {
+		f_lstCustom << lstCustom[i].getName() << ',';
+		f_lstCustom << lstCustom[i].getUsername() << ',';
+		f_lstCustom << lstCustom[i].getPassword();
+		if (i < lstCustom.size() - 1) f_lstCustom << endl;
 	}
 	f_lstCustom.close();
 }
@@ -376,7 +521,7 @@ void SystemLibrary::ExportListCustomtoFile()
 void  SystemLibrary::ExportListAdmintoFile()
 {
 	fstream f_lstAdmin;
-	f_lstAdmin.open("listAdmin.txt", ios::trunc | ios::out);
+	f_lstAdmin.open("login\\listAdmin.txt", ios::trunc | ios::out);
 	for (int i = 0; i < lstAdmin.size(); i++) {
 		f_lstAdmin << lstAdmin[i].getName() << ',';
 		f_lstAdmin << lstAdmin[i].getUsername() << ',';
@@ -384,6 +529,32 @@ void  SystemLibrary::ExportListAdmintoFile()
 		if (i < lstAdmin.size() - 1) f_lstAdmin << endl;
 	}
 	f_lstAdmin.close();
+}	
+
+void SystemLibrary::ExportListAuthortoFile()
+{
+	fstream f_lstAuthor;
+	f_lstAuthor.open("login\\listAuthor.txt", ios::trunc | ios::out);
+	for (int i = 0; i < lstAuthor.size(); i++) {
+		f_lstAuthor << lstAuthor[i].getName() << ',';
+		f_lstAuthor << lstAuthor[i].getUsername() << ',';
+		f_lstAuthor << lstAuthor[i].getPassword();
+		if (i < lstAuthor.size() - 1) f_lstAuthor << endl;
+	}
+	f_lstAuthor.close();
+}
+
+void SystemLibrary::ExportListNXBtoFile()
+{
+	fstream f_lstNXB;
+	f_lstNXB.open("login\\listNXB.txt", ios::trunc | ios::out);
+	for (int i = 0; i < lstNXB.size(); i++) {
+		f_lstNXB << lstNXB[i].getName() << ',';
+		f_lstNXB << lstNXB[i].getUsername() << ',';
+		f_lstNXB << lstNXB[i].getPassword();
+		if (i < lstNXB.size() - 1) f_lstNXB << endl;
+	}
+	f_lstNXB.close();
 }
 
 void SystemLibrary::ExportAllMessage()
@@ -743,6 +914,24 @@ void SystemLibrary::giftVoucher(string username)
 	}
 }
 
+void SystemLibrary::notifate_to_all_custom()
+{
+	string text;
+	cin.ignore(256, '\n');    cout << "content: ";       getline(cin, text);
+
+	for (auto& a : lstCustom) {
+			currentOnline->Send(&a, text);
+	}
+
+	for (auto& a : lstAuthor) {
+			currentOnline->Send(&a, text);
+	}
+
+	for (auto& a : lstNXB) {
+			currentOnline->Send(&a, text);
+	}
+}
+
 void SystemLibrary::chat()
 {
 	string username;
@@ -758,12 +947,22 @@ void SystemLibrary::chat()
 		}
 	}
 
+
 	for (auto& a : lstAdmin) {
 		if (a.getUsername() == username) {
 			currentOnline->Send(&a, text);
 			return;
 		}
 	}
+
+
+	for (auto& a : lstNXB) {
+		if (a.getUsername() == username) {
+			currentOnline->Send(&a, text);
+			return;
+		}
+	}
+
 
 	for (auto& a : lstAuthor) {
 		if (a.getUsername() == username) {
@@ -772,23 +971,7 @@ void SystemLibrary::chat()
 		}
 	}
 
-	for (auto& a : lstNXB) {
-		if (a.getUsername() == username) {
-			currentOnline->Send(&a, text);
-			return;
-		}
-	}
-}
-
-void SystemLibrary::notifate_to_all_custom()
-{
-	string content;
-	cin.ignore(256, '\n');
-	cout << "\nContent: ";    getline(cin, content);
-
-	for (auto& a : lstCustom) {
-		currentOnline->Send(&a, content);
-	}
+	cout << "\nthis username is not exist";
 }
 
 void SystemLibrary::custom_loop()
@@ -818,7 +1001,7 @@ void SystemLibrary::custom_loop()
 			return;
 		case 1:
 			system("cls");
-			viewAllBook();
+			currentOnline->view_list_book(lstBook);
 			break;
 		case 2:
 			currentOnline->buy(lstBook);
@@ -870,7 +1053,7 @@ void SystemLibrary::admin_loop()
 			<< "\n5. Add detail book"
 			<< "\n6. Remove detail book"
 			<< "\n7. Remove a Custom"
-			<< "\n8. Edit Price"
+			<< "\n8. Edit Book"
 			<< "\n9. Change Password"
 			<< "\n10. Gift voucher for custom"
 			<< "\n11. View message received"
@@ -914,7 +1097,7 @@ void SystemLibrary::admin_loop()
 		case 8:
 			system("cls");
 			viewAllBook();
-			editPrice();
+			editBookbyAdmin();
 			break;
 		case 9:
 			cin.ignore(256, '\n');
@@ -961,7 +1144,9 @@ void SystemLibrary::provider_loop()
 			<< "\n4. View message received"
 			<< "\n5. View message sended"
 			<< "\n6. Send message"
-			<< "\n7. logout"
+			<< "\n7. Edit book"
+			<< "\n8. Remove a book"
+			<< "\n9. Add a book"
 			<< "\n0. Exit"
 			<< "\nSelect: ";    cin >> select;
 		switch (select) {
@@ -999,6 +1184,14 @@ void SystemLibrary::provider_loop()
 			chat();
 			break;
 		case 7:
+			editBookbyProvider();
+			break;
+		case 8:
+			remove_detailBook_by_Provider();
+			break;
+		case 9:
+			add_book_by_provider();
+			break;
 		case 0:
 			currentOnline = NULL;
 			return;
@@ -1026,6 +1219,8 @@ void SystemLibrary::main_loop()
 			ExportListBooktoFile();
 			ExportListCustomtoFile();
 			ExportListAdmintoFile();
+			ExportListAuthortoFile();
+			ExportListNXBtoFile();
 			ExportAllMessage();
 			return;
 		}

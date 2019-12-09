@@ -97,3 +97,39 @@ void Book::OffSellMode()
 {
 	OnSell = false;
 }
+
+void Book::editBook()
+{
+	int select;
+	cout
+		<< "\nChange Information"
+		<< "\n1. name"
+		<< "\n2. type"
+		<< "\n3. author"
+		<< "\n4. ID"
+		<< "\n5. NXB"
+		<< "\n6. Price"
+		<< "\nSelect: ";    cin >> select;
+	switch (select) {
+	case 1:
+		cin.ignore(256, '\n');    cout << "new name: ";    getline(cin, name);
+		break;
+	case 2:
+		cin.ignore(256, '\n');    cout << "new type: ";    getline(cin, type);
+		break;
+	case 3:
+		cin.ignore(256, '\n');    cout << "new name's author: ";    getline(cin, author);
+		break;
+	case 4:
+		cout << "new ID: ";    cin >> ID;
+		break;
+	case 5:
+		cin.ignore(256, '\n');    cout << "new name's NXB: ";    getline(cin, NXB);
+		break;
+	case 6:
+		cout << "new Price: ";    cin >> price;
+		break;
+	default:
+		break;
+	}
+}
