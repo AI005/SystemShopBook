@@ -1,0 +1,30 @@
+One Piece - 1,comic,Oda,19800,JAP,1
+One Piece - 2,comic,Oda,19800,JAP,1
+One Piece - 3,comic,Oda,19800,JAP,1
+One Piece - 4,comic,Oda,19800,JAP,1
+One Piece - Raw,comic,Oda,19800,JAP,1
+Dragon Ball - 1,comic,Phuong Nguyen,17500,KIM DONG,1
+Dragon Ball - 2,comic,Phuong Nguyen,17500,KIM DONG,1
+Dragon Ball - 3,comic,Phuong Nguyen,17500,KIM DONG,1
+Conan - 2,comic,DC-comic,25000,KIM DONG,1
+Dragon Ball Z,comic,Dinh Ba Tien,46700,KIM DONG,1
+Nhap Mon C++,science,Tran Dan Thu,45000,KHKT,1
+KTLT C++,science,Dinh Ba Tien,70000,KHKT,1
+OOP C++,science,Tran Dan Thu,39000,KHKT,1
+CTDL-GT C++,science,Tran Dan Thu,15000,KHKT,1
+MANG MAY TINH,Science,Dinh Ba Tien,29000,KHKT,1
+AC MA,thriller,Advenger,13500,ABC,1
+I MISS YOU,romantic,Advenger,12700,ABC,1
+CO GIAO THAO,violence,DC-Comic,90000,ABC,1
+SUPERMAN,Comic,DC-Comic,67100,ABC,1
+IRONMAN,super,Advenger,13000,ABC,1
+BAC KIM THANG,literature,Phuong Nguyen,13500,Quoc Gia,1
+CHI PHEO,literature,NAM CAO,21700,Quoc Gia,1
+LAO HAC,literature,NAM CAO,22000,Quoc Gia,1
+THANH GIONG,literature,NAM CAO,14100,Quoc Gia,1
+DUA HAU,literature,NAM CAO,17000,Quoc Gia,1
+,literature,NAM CAO,17000,Quoc Gia,1
+,literature,NAM CAO,17000,Quoc Gia,1
+,literature,NAM CAO,17000,Quoc Gia,1
+,literature,NAM CAO,17000,Quoc Gia,1
+,literature,NAM CAO,17000,Quoc Gia,1
